@@ -30,7 +30,10 @@ export class AddExpenseComponent implements OnInit {
 
   initCreateExpanse(): void {
     const expense = this.addExpenseForm.value;
-    expense.creditOn = this.datetimeService.getCurrentDateTime();
+    expense.createdOn = this.datetimeService.selectedDate;
+    if(!expense.createdOn) {
+      expense.createdOn = this.datetimeService.getCurrentDateTime();
+    }
     this.actionService.createExpense(expense).then(() => {
       console.log('Expanse created with Success');
       this.dismissModal();

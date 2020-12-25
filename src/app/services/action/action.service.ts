@@ -16,7 +16,6 @@ export class ActionService {
   ) {}
 
   async createExpense(expense: ExpenseInterface): Promise<void> {
-    const key = this.datetimeService.getDateTimeISO(expense.creditOn);
     await this.storageService.saveExpenseToLocal(expense);
     return this.dataService.setExpenses(expense);
   }

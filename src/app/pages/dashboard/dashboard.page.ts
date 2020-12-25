@@ -5,6 +5,7 @@ import {DataService} from '../../services/data/data.service';
 import {ExpenseInterface} from '../../interfaces/ExpenseInterface';
 import {SubscriptionLike} from 'rxjs';
 import {ActionService} from "../../services/action/action.service";
+import {DatetimeService} from "../../services/datetime/datetime.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -15,20 +16,29 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   expenses: ExpenseInterface[];
   subscription: SubscriptionLike;
+  todayDate: Date;
+  installDate: Date;
+  selectedDate: Date;
 
   constructor(
       private modalController: ModalController,
       private dataService: DataService,
-      private actionService: ActionService
+      private actionService: ActionService,
+      private datetimeService: DatetimeService
   ) {
-    this.expenses = [];
     this.actionService.getTodayExpensesFromLocal().then((value => this.expenses = value));
+    this.todayDate = this.datetimeService.todayDate;
+    this.installDate = this.datetimeService.installDate;
+    this.selectedDate = this.datetimeService.getCurrentDateTime();
   }
 
   ngOnInit() {
     this.subscription = this.dataService.getExpensesSubscription()
         .subscribe({
           next: (expense) => {
+            if(!this.expenses) {
+              this.expenses = [];
+            }
             if (expense != null){
               this.expenses.push(expense);
             }
@@ -46,5 +56,15 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+  }
+
+  changeSelectedDate(value): void {
+    this.datetimeService.selectedDate = this.datetimeService.createDateFromString(value);
+    this.selectedDate = this.datetimeService.selectedDate;
+  }
+
+  setCurrentToTodayDate(): void {
+    this.todayDate = this.datetimeService.getCurrentDateTime();
+    this.selectedDate = this.datetimeService.getCurrentDateTime();
   }
 }

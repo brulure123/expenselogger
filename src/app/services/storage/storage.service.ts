@@ -12,7 +12,7 @@ export class StorageService {
   constructor(private datetimeService: DatetimeService) { }
 
   async saveExpenseToLocal(expense: ExpenseInterface): Promise<void>{
-    const key = this.datetimeService.getDateTimeISO();
+    const key = this.datetimeService.getDateTimeISOWithFormat(expense.createdOn);
     let toDaysExpenses: ExpenseInterface[] = [];
     this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
       if(expenses == null){
@@ -27,13 +27,13 @@ export class StorageService {
   }
 
   async getExpensesFromLocal(date?: Date): Promise<ExpenseInterface[]> {
-    const key = date ? this.datetimeService.getDateTimeISO(date) : this.datetimeService.getDateTimeISO();
+    const key = date ? this.datetimeService.getDateTimeISOWithFormat(date) : this.datetimeService.getDateTimeISOWithFormat();
     return await this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
       return expenses;
     });
   }
 
-  async saveToLocalStorage(key: string, value: ExpenseInterface[]): Promise<void> {
+  async saveToLocalStorage(key: string, value: any): Promise<void> {
     await Plugins.Storage.set({
       key,
       value: JSON.stringify(value)
