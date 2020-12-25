@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ModalController} from '@ionic/angular';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActionService} from '../../../services/action/action.service';
 import {DatetimeService} from '../../../services/datetime/datetime.service';
+import {ExpenseInterface} from "../../../interfaces/ExpenseInterface";
 
 @Component({
   selector: 'app-add-expense',
@@ -11,6 +12,8 @@ import {DatetimeService} from '../../../services/datetime/datetime.service';
 })
 export class AddExpenseComponent implements OnInit {
 
+  expenseForm: ExpenseInterface;
+
   constructor(
       private modalController: ModalController,
       private actionService: ActionService,
@@ -18,13 +21,12 @@ export class AddExpenseComponent implements OnInit {
   ) {}
 
   addExpenseForm = new FormGroup({
-    amount: new FormControl(''),
+    amount: new FormControl('', Validators.required),
     description: new FormControl(''),
-    type: new FormControl(''),
+    type: new FormControl('', Validators.required),
   });
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   initCreateExpanse(): void {
     const expense = this.addExpenseForm.value;

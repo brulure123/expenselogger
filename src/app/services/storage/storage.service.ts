@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
+import {ExpenseInterface} from "../../interfaces/ExpenseInterface";
+import {DatetimeService} from "../datetime/datetime.service";
 const { Storage } = Plugins;
 
 @Injectable({
@@ -7,9 +9,31 @@ const { Storage } = Plugins;
 })
 export class StorageService {
 
-  constructor() { }
+  constructor(private datetimeService: DatetimeService) { }
 
-  async saveToLocalStorage(key: string, value: any) {
+  async saveExpenseToLocal(expense: ExpenseInterface): Promise<void>{
+    const key = this.datetimeService.getDateTimeISO();
+    let toDaysExpenses: ExpenseInterface[] = [];
+    this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
+      if(expenses == null){
+        toDaysExpenses.push(expense);
+      }else {
+        toDaysExpenses = expenses;
+        toDaysExpenses.push(expense);
+      }
+    }).then(() => {
+      this.saveToLocalStorage(key, toDaysExpenses);
+    }).catch((error) => console.log(error));
+  }
+
+  async getExpensesFromLocal(date?: Date): Promise<ExpenseInterface[]> {
+    const key = date ? this.datetimeService.getDateTimeISO(date) : this.datetimeService.getDateTimeISO();
+    return await this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
+      return expenses;
+    });
+  }
+
+  async saveToLocalStorage(key: string, value: ExpenseInterface[]): Promise<void> {
     await Plugins.Storage.set({
       key,
       value: JSON.stringify(value)

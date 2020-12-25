@@ -43,18 +43,24 @@
           <ion-icon size="large" name="create-outline">Amount</ion-icon>
         </ion-button>
       </ion-buttons>
-      <ion-title slot="start">{{ expense.amount}}</ion-title>
+      <ion-title slot="start" size="large">$ {{ expense.amount}}</ion-title>
     </ion-toolbar>
     <ion-card-content>
       {{ expense.description }}
-      <ion-footer>
-        <ion-label>
-          {{ expense.creditOn | date }}
-        </ion-label>
-        <ion-label>
-          {{ expense.type }}
-        </ion-label>
-      </ion-footer>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-text class="ion-text-center">
+                {{ expense.creditOn | date }}
+              </ion-text>
+            </ion-col>
+            <ion-col size="6">
+              <ion-text class="ion-text-center">
+                {{ expense.type }}
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
     </ion-card-content>
   </ion-card>
   <!-- fab placed to the top end -->

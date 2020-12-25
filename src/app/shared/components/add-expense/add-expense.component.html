@@ -10,7 +10,7 @@
 <ion-content>
   <form [formGroup]="addExpenseForm">
     <ion-item>
-      <ion-input placeholder="Type Amount" type="text" formControlName="amount"></ion-input>
+      <ion-input placeholder="Type Amount" type="number" formControlName="amount"></ion-input>
     </ion-item>
     <ion-item>
       <ion-textarea placeholder="Type Description" type="text" formControlName="description"></ion-textarea>
@@ -25,6 +25,8 @@
       </ion-select>
     </ion-item>
     <br>
-    <ion-button color="primary" fill="solid" size="large" expand="block" (click)="initCreateExpanse()">Add</ion-button>
+    <ion-button color="primary" fill="solid" size="large" expand="block"
+                (click)="initCreateExpanse()"
+                [disabled]="!addExpenseForm.valid">Add</ion-button>
   </form>
 </ion-content>
