@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import {DataService} from '../data/data.service';
-import {ExpenseInterface} from '../../interfaces/ExpenseInterface';
-import {StorageService} from "../storage/storage.service";
-import {DatetimeService} from "../datetime/datetime.service";
+import { DataService } from '../data/data.service';
+import { ExpenseInterface } from '../../interfaces/ExpenseInterface';
+import { StorageService } from "../storage/storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -11,18 +10,24 @@ export class ActionService {
 
   constructor(
       private dataService: DataService,
-      private storageService: StorageService,
-      private datetimeService: DatetimeService
-  ) {}
-
-  async createExpense(expense: ExpenseInterface): Promise<void> {
-    await this.storageService.saveExpenseToLocal(expense);
-    return this.dataService.setExpenses(expense);
+      private storageService: StorageService
+  ) {
+    this.getTodayExpensesFromLocal();
   }
 
-  async getTodayExpensesFromLocal(): Promise<ExpenseInterface[]> {
+  async createExpense(expense: ExpenseInterface): Promise<void> {
+    return await this.storageService.saveExpenseToLocal(expense).then().catch();
+  }
+
+  async getTodayExpensesFromLocal(): Promise<void> {
     return await this.storageService.getExpensesFromLocal().then((expenses: ExpenseInterface[]) => {
-      return expenses;
+      this.dataService.setExpenses(expenses);
     });
+  }
+
+  async emitExpensesByDateFromLocal(date: Date): Promise<void> {
+    return this.storageService.getExpensesFromLocal(date).then((expenses) => {
+      this.dataService.setExpenses(expenses)
+    })
   }
 }

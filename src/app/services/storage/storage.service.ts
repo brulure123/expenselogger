@@ -2,27 +2,34 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import {ExpenseInterface} from "../../interfaces/ExpenseInterface";
 import {DatetimeService} from "../datetime/datetime.service";
-const { Storage } = Plugins;
+import {DataService} from "../data/data.service";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  constructor(private datetimeService: DatetimeService) { }
+  constructor(
+      private datetimeService: DatetimeService,
+      private dataService: DataService
+  )
+  { }
 
   async saveExpenseToLocal(expense: ExpenseInterface): Promise<void>{
     const key = this.datetimeService.getDateTimeISOWithFormat(expense.createdOn);
-    let toDaysExpenses: ExpenseInterface[] = [];
-    this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
+    let expensesList: ExpenseInterface[] = [];
+    return this.getFromLocalStorage(key).then((expenses: ExpenseInterface[]) => {
       if(expenses == null){
-        toDaysExpenses.push(expense);
+        expensesList.push(expense);
       }else {
-        toDaysExpenses = expenses;
-        toDaysExpenses.push(expense);
+        expensesList = expenses;
+        expensesList.push(expense);
       }
     }).then(() => {
-      this.saveToLocalStorage(key, toDaysExpenses);
+      this.saveToLocalStorage(key, expensesList).then(() => {
+        this.dataService.setExpenses(expensesList);
+      });
     }).catch((error) => console.log(error));
   }
 
@@ -34,7 +41,7 @@ export class StorageService {
   }
 
   async saveToLocalStorage(key: string, value: any): Promise<void> {
-    await Plugins.Storage.set({
+    return await Plugins.Storage.set({
       key,
       value: JSON.stringify(value)
     });
@@ -49,7 +56,10 @@ export class StorageService {
     return await Plugins.Storage.remove({ key });
   }
 
-  async clearLocalStorage(): Promise<void> {
+  async clearLocalStorage(isReset?: boolean): Promise<void> {
+    if(isReset){
+      this.dataService.setExpenses([]);
+    }
     return await Plugins.Storage.clear();
   }
 }

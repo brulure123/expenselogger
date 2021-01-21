@@ -8,6 +8,7 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 
 import { DashboardPage } from './dashboard.page';
 import {SharedModule} from '../../shared/shared.module';
+import {CategoryPipe} from "../../pipe/category/category.pipe";
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import {SharedModule} from '../../shared/shared.module';
     SharedModule,
     DashboardPageRoutingModule
   ],
-  declarations: [DashboardPage]
+  declarations: [DashboardPage, CategoryPipe]
 })
 export class DashboardPageModule {}

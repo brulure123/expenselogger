@@ -24,6 +24,10 @@ const routes: Routes = [
         loadChildren: () => import('../pages/activity/activity.module').then( m => m.ActivityPageModule)
       },
       {
+        path: 'account',
+        loadChildren: () => import('../pages/account/account.module').then( m => m.AccountPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/dashboard',
         pathMatch: 'full'

@@ -4,6 +4,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActionService} from '../../../services/action/action.service';
 import {DatetimeService} from '../../../services/datetime/datetime.service';
 import {ExpenseInterface} from "../../../interfaces/ExpenseInterface";
+import {ExpensesTypes} from "../../../constants/constants";
 
 @Component({
   selector: 'app-add-expense',
@@ -13,12 +14,15 @@ import {ExpenseInterface} from "../../../interfaces/ExpenseInterface";
 export class AddExpenseComponent implements OnInit {
 
   expenseForm: ExpenseInterface;
+  expensesType: any;
 
   constructor(
       private modalController: ModalController,
       private actionService: ActionService,
       private datetimeService: DatetimeService
-  ) {}
+  ) {
+    this.expensesType = ExpensesTypes;
+  }
 
   addExpenseForm = new FormGroup({
     amount: new FormControl('', Validators.required),
@@ -30,14 +34,19 @@ export class AddExpenseComponent implements OnInit {
 
   initCreateExpanse(): void {
     const expense = this.addExpenseForm.value;
-    expense.createdOn = this.datetimeService.selectedDate;
-    if(!expense.createdOn) {
-      expense.createdOn = this.datetimeService.getCurrentDateTime();
-    }
-    this.actionService.createExpense(expense).then(() => {
-      console.log('Expanse created with Success');
-      this.dismissModal();
-    }).catch((err) => console.log(err));
+    expense.amount = Number(expense.amount.toFixed(2));
+    this.datetimeService.getSelectedDate()
+        .then((date: Date) => {
+          if(!expense.createdOn) {
+            expense.createdOn = date;
+          }
+        })
+        .then(() => {
+          this.actionService.createExpense(expense).then(() => {
+          console.log('Expanse created with Success');
+          this.dismissModal();
+        }).catch((err) => console.log(err));
+    });
   }
 
   dismissModal(): void {
