@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage {
 
   registerForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -16,12 +16,8 @@ export class SignupPage implements OnInit {
   });
   constructor() { }
 
-  ngOnInit() {
-  }
-
   // Todo : Implement Forgot Password Functionality after Back-end Ready
   doRegister(): void{
     console.log("Register Form Submitted");
   }
-
 }

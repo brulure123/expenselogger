@@ -6,15 +6,12 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './forgot-password.page.html',
   styleUrls: ['./forgot-password.page.scss'],
 })
-export class ForgotPasswordPage implements OnInit {
+export class ForgotPasswordPage {
 
   forgotPasswordForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
   })
   constructor() { }
-
-  ngOnInit() {
-  }
 
   // Todo : Implement Forgot Password Functionality after Back-end Ready
   onSubmit(): void {
