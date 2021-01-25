@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
@@ -17,6 +17,11 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./auth/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: '',
+    redirectTo: 'tabs',
+    pathMatch: 'full'
   }
 ];
 @NgModule({
