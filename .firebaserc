@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "expensetracker-5b05a": {
+      "hosting": {
+        "app": [
+          "expensetracker-5b05a"
+        ]
+      }
+    }
+  }
+}

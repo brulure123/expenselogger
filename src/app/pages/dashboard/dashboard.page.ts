@@ -1,4 +1,4 @@
-import { ExpenseStorageService } from './../../services/expense-storage/expense-storage.service';
+import { ExpenseStorageService } from '../../services/expense-storage/expense-storage.service';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActionSheetController, ModalController } from '@ionic/angular';
 import {AddExpenseComponent} from '../../shared/components/add-expense/add-expense.component';
@@ -81,7 +81,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
-  changeSelectedDate(value): void {
+  changeSelectedDate(value: any): void {
     this.selectedDate = this.datetimeService.createDateFromString(value);
     this.datetimeService.setSelectedDate(value).then(() => {
         this.expenseStorage.emitExpensesByDateFromLocal(this.selectedDate);
