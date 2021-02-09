@@ -1,12 +1,13 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../services/auth/auth.service";
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage {
+export class SignupPage implements OnInit{
 
   registerForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -14,10 +15,21 @@ export class SignupPage {
     password: new FormControl('', [Validators.required, Validators.min(8)]),
     confirmPassword: new FormControl('', [Validators.required, Validators.min(8)]),
   });
-  constructor() { }
 
-  // Todo : Implement Forgot Password Functionality after Back-end Ready
+  constructor(private authService: AuthService) {
+  }
+
+  ngOnInit(): void {
+  }
+
   doRegister(): void{
-    console.log("Register Form Submitted");
+    const loginFormValues = this.registerForm.value;
+    this.authService.registerWithEmailAndPassowrd(
+        loginFormValues.email,
+        loginFormValues.password
+    ).subscribe({
+      next: (res) => console.log(res),
+      error: (err) => console.error(err)
+    });
   }
 }

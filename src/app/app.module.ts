@@ -9,6 +9,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,7 +20,8 @@ import {ReactiveFormsModule} from '@angular/forms';
       BrowserModule,
       IonicModule.forRoot(),
       AppRoutingModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [
     StatusBar,
